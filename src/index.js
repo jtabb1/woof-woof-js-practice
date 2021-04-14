@@ -24,15 +24,13 @@ function fetchDogs(number=0, quality='') {
     fetch(URL)
     .then(resp => resp.json())
     .then(results => {
-        console.log(results);
-        console.log(!!dog);
-        return results;
-    })
-    .then(results => {
         // main processing goes here to assign values to
         //   dogs and dog
         results.forEach( item => dogs.push(item))
-        console.log(dogs);
+        
+        console.log(!!dog);
+        console.log(!!quality); // <- make a new function for quality
+        console.log(results);
         return results;
     })
     .catch(err => console.log(err));

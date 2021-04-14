@@ -6,6 +6,14 @@ const dogs = [];
 let dog;
 let number = 0; // <= delete this past the debugging stage
 
+// Strategy:
+//
+// Draft this similarly to the Dog CEO homework.
+//
+// Take advantage of the pre-written style sheet and the
+// mock up to complete this homework commit by commit.
+//
+
 // Test run commands:
 console.log('hello');
 fetchDogs();
@@ -17,11 +25,14 @@ function fetchDogs(number=0, quality='') {
     .then(resp => resp.json())
     .then(results => {
         console.log(results);
+        console.log(!!dog);
         return results;
     })
     .then(results => {
         // main processing goes here to assign values to
         //   dogs and dog
+        results.forEach( item => dogs.push(item))
+        console.log(dogs);
         return results;
     })
     .catch(err => console.log(err));

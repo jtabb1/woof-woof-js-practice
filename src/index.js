@@ -4,7 +4,7 @@ const filterBtn = document.getElementById('good-dog-filter');
 
 const dogs = [];
 let dog;
-let number = 0; // <= delete this past the debugging stage
+// let number = 0; // <= delete this past the debugging stage
 
 // Strategy:
 //
@@ -17,6 +17,7 @@ let number = 0; // <= delete this past the debugging stage
 // Test run commands:
 console.log('hello');
 fetchDogs();
+console.log(!!dog);
 
 function fetchDogs(number=0, quality='') {
     let URL = 'http://localhost:3000/pups'
@@ -26,14 +27,24 @@ function fetchDogs(number=0, quality='') {
     .then(results => {
         // main processing goes here to assign values to
         //   dogs and dog
-        results.forEach( item => dogs.push(item))
+        results.forEach( dog => dogs.push(dog));
         
         console.log(!!dog);
         console.log(!!quality); // <- make a new function for quality
         console.log(results);
+        
+        renderDogs(dogs);
         return results;
     })
     .catch(err => console.log(err));
 }
 
-function renderDogs() {}
+function renderDogs(dogs) {
+    const spn = document.createElement('span');
+    dogs.forEach( dog => {
+        const spn = document.createElement('span');
+        spn.innerHTML = `${dog.name}`;
+        // spn.innerHTML = `<h3>${dog.name}</h3>`;
+        dogBarDiv.appendChild(spn);
+    });
+}

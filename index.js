@@ -3,22 +3,23 @@ const dogSpotDiv = document.getElementById('dog-info');
 const filterBtn = document.getElementById('good-dog-filter');
 const dbURL = 'http://localhost:3000/pups';
 
-const dogs = [];
+let dogFilter = !!0;
 let dog;
-// let number = 0; // <= delete this past the debugging stage
 
-// Strategy:
-//
-// Draft this similarly to the Dog CEO homework.
-//
-// Take advantage of the pre-written style sheet and the
-// mock up to complete this homework commit by commit.
-//
+filterBtn.addEventListener('click',filterDogs);
 
-// Test run commands:
-console.log('hello');
 fetchDogs();
-console.log(!!dog);
+
+function filterDogs() {
+    if (filterBtn.innerHTML === 'Filter good dogs: ON') {
+        filterBtn.innerHTML = 'Filter good dogs: OFF';
+        dogFilter = !!0;
+    } else {
+    filterBtn.innerHTML = 'Filter good dogs: ON';
+    dogFilter = !0;
+    }
+    fetchDogs();
+}
 
 function fetchDog(id) {
     const URL = `${dbURL}/${id}`;
@@ -39,7 +40,7 @@ function renderDog(dog) {
     const btn = document.createElement('btn');
     img.src = dog.image;
     img.alt = "The selected dog.";
-    p1.innerHTML = dog.name;
+    p1.innerHTML = `<h2>${dog.name}</h2>`;
     let dogQlty = "Bad Dog!";
     if (dog.isGoodDog) dogQlty = "Good Dog!";
     btn.innerHTML = dogQlty;
@@ -70,32 +71,29 @@ function QltyFlip() {
         dog.isGoodDog ? dogQlty = "Good Dog" : dogQlty = "Bad Dog";
         const btn = document.getElementById('dog-quality-toggler');
         btn.innerHTML = dogQlty;
+        fetchDogs();
     })
     .catch(err => console.log(err));
 }
 
-function fetchDogs(number=0, quality='') {
+function fetchDogs() {
     fetch(dbURL)
     .then(resp => resp.json())
     .then(results => {
-        // main processing goes here to assign values to
-        //   dogs and dog
-        results.forEach( dog => dogs.push(dog));
-        
-        console.log(results);
-        
-        renderDogs(dogs);
+        renderDogs(results);
         return results;
     })
     .catch(err => console.log(err));
 }
 
 function renderDogs(dogs) {
-    const spn = document.createElement('span');
+    dogBarDiv.innerHTML = '';
     dogs.forEach( dog => {
-        const spn = document.createElement('span');
-        spn.innerHTML = `${dog.name}`;
-        spn.addEventListener('click', () => fetchDog(dog.id));
-        dogBarDiv.appendChild(spn);
+        if (!(dogFilter === !0 && dog.isGoodDog === !!0)) {
+            const spn = document.createElement('span');
+            spn.innerHTML = `${dog.name}`;
+            spn.addEventListener('click', () => fetchDog(dog.id));
+            dogBarDiv.appendChild(spn);
+        }
     });
 }

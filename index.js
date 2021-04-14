@@ -35,7 +35,6 @@ function fetchDog(id) {
 function renderDog(dog) {
     dogSpotDiv.innerHTML = '';
     const img = document.createElement('img');
-    // const cpn = document.createElement('caption');
     const p1 = document.createElement('p');
     const btn = document.createElement('btn');
     img.src = dog.image;
@@ -45,10 +44,34 @@ function renderDog(dog) {
     if (dog.isGoodDog) dogQlty = "Good Dog!";
     btn.innerHTML = dogQlty;
     btn.id = "dog-quality-toggler";
-    // img.appendChild(cpn);
+    btn.addEventListener('click', QltyFlip)
     dogSpotDiv.appendChild(img);
     dogSpotDiv.appendChild(p1);
     dogSpotDiv.appendChild(btn);
+}
+
+function QltyFlip() {
+    const URL = `${dbURL}/${dog.id}`;
+    const data = {
+        isGoodDog: !dog.isGoodDog,
+    };
+    const configObj = {
+        method: "PATCH", 
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(data)
+    };
+    fetch(URL, configObj)
+    .then(resp => resp.json())
+    .then( (result) => {
+        dog.isGoodDog = result.isGoodDog;
+        dog.isGoodDog ? dogQlty = "Good Dog" : dogQlty = "Bad Dog";
+        const btn = document.getElementById('dog-quality-toggler');
+        btn.innerHTML = dogQlty;
+    })
+    .catch(err => console.log(err));
 }
 
 function fetchDogs(number=0, quality='') {
@@ -59,8 +82,6 @@ function fetchDogs(number=0, quality='') {
         //   dogs and dog
         results.forEach( dog => dogs.push(dog));
         
-        console.log(!!dog);
-        console.log(!!quality); // <- make a new function for quality
         console.log(results);
         
         renderDogs(dogs);
